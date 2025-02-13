@@ -11,6 +11,9 @@ class Logger(ABC):
     @abstractmethod
     def stop_listening(self):
         pass
+    @abstractmethod
+    def get_data(self):
+        pass
 
 class KeyLoggerService(Logger):
 

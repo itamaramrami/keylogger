@@ -12,7 +12,7 @@ class Encryption(ABC):
 class XOREncryption:
 
     def __init__(self,password):
-        self.password = password.encode("utf-8")
+        self.__password = password
 
 
     def encrypt(self,text):
@@ -25,7 +25,7 @@ class XOREncryption:
         xor_encrypted = "".join(
             chr(ord(x) ^ ord(y))
             for x, y in zip(
-                text, self.password * (len(text) // len(self.password)) + self.password[: len(text) % len(self.password)]
+                text, self.__password * (len(text) // len(self.__password)) + self.__password[: len(text) % len(self.__password)]
             )
         )
         return xor_encrypted
@@ -42,7 +42,12 @@ class XOREncryption:
             chr(ord(x) ^ ord(y))
             for x, y in zip(
                 encrypted_text,
-                self.password * (len(encrypted_text) // len(self.password))
-                + self.password[: len(encrypted_text) % len(self.password)],
+                self.__password * (len(encrypted_text) // len(self.__password))
+                + self.__password[: len(encrypted_text) % len(self.__password)],
             )
         )
+
+# a = XOREncryption('good morning')
+# k =a.encrypt('good morning')
+# print(k)
+# print(a.decrypt(k))

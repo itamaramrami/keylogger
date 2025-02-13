@@ -31,3 +31,8 @@ class FileWriter(Write):
 
         with open(name, "w") as file:
             json.dump(origin_data, file, indent='\t')
+    @staticmethod
+    def load(file_name : str):
+        with open(file_name) as file:
+            temp = json.load(file)
+        return temp

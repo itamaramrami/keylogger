@@ -47,7 +47,3 @@ class XOREncryption:
             )
         )
 
-# a = XOREncryption('good morning')
-# k =a.encrypt('good morning')
-# print(k)
-# print(a.decrypt(k))

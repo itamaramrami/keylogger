@@ -4,7 +4,7 @@ from pynput.keyboard import Listener , Key , KeyCode
 from abc import ABC, abstractmethod
 
 
-class Logger(ABC):
+class ILogger(ABC):
     @abstractmethod
     def start_listening(self):
         pass
@@ -15,7 +15,7 @@ class Logger(ABC):
     def get_data(self):
         pass
 
-class KeyLoggerService(Logger):
+class KeyLoggerService(ILogger):
 
     def __init__(self):
         self.data = dict()

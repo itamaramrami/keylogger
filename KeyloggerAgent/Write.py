@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 import json
 
-class Write(ABC):
+class IWriter(ABC):
     @abstractmethod
     def write(self, data , name):
         pass
 
-class FileWriter(Write):
+class FileWriter(IWriter):
     def write(self, data: dict, name:str ):
         """
         Reads the current file and updates
@@ -30,9 +30,10 @@ class FileWriter(Write):
                 origin_data[window][timestamp] += str(data[window][timestamp])
 
         with open(name, "w") as file:
-            json.dump(origin_data, file, indent='\t')
+            json.dump(origin_data, file, indent='\t' , ensure_ascii=False )
     @staticmethod
     def load(file_name : str):
         with open(file_name) as file:
             temp = json.load(file)
         return temp
+

@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 
-class Encryption(ABC):
+class IEncrypter(ABC):
     @abstractmethod
     def encrypt(self,text):
         pass
@@ -9,7 +9,7 @@ class Encryption(ABC):
     def decrypt(self,encrypted_text):
         pass
 
-class XOREncryption:
+class XOREncryption(IEncrypter):
 
     def __init__(self,password):
         self.__password = password
@@ -22,8 +22,8 @@ class XOREncryption:
         :param text: unencrypted text
         :return: encrypted text
         """
-        xor_encrypted = "".join(
-            chr(ord(x) ^ ord(y))
+        xor_encrypted = list(
+            (ord(x) ^ ord(y))
             for x, y in zip(
                 text, self.__password * (len(text) // len(self.__password)) + self.__password[: len(text) % len(self.__password)]
             )
@@ -38,12 +38,12 @@ class XOREncryption:
         :param encrypted_text: encrypted text
         :return: unencrypted text
         """
-        return "".join(
-            chr(ord(x) ^ ord(y))
+        return ''.join(
+            chr(x ^ ord(y))
             for x, y in zip(
                 encrypted_text,
                 self.__password * (len(encrypted_text) // len(self.__password))
-                + self.__password[: len(encrypted_text) % len(self.__password)],
+                + self.__password[: len(encrypted_text) % len(self.__password)]
             )
         )
 

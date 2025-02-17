@@ -26,8 +26,8 @@ class FileWriter(IWriter):
                 origin_data[window] = dict()
             for timestamp in data[window]:
                 if timestamp not in origin_data[window]:
-                    origin_data[window][timestamp] = str()
-                origin_data[window][timestamp] += str(data[window][timestamp])
+                    origin_data[window][timestamp] = list()
+                origin_data[window][timestamp] += data[window][timestamp]
 
         with open(name, "w") as file:
             json.dump(origin_data, file, indent='\t' , ensure_ascii=False )

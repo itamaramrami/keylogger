@@ -30,7 +30,7 @@ class XOREncryption(IEncrypter):
         )
         return xor_encrypted
 
-    # Decode using XOR
+
     def decrypt(self,encrypted_text):
         """
         Receives an encrypted text using the XOR method and

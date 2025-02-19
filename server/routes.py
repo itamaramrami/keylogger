@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from controllers import *
 
-# יצירת Blueprint לניהול הראוטים
+# Creating a Blueprint for the management of the routers
 app_routes = Blueprint("app_routes", __name__)
 
 @app_routes.route("/")

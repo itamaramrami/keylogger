@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from routes import app_routes
 from flask_cors import CORS
 
@@ -8,7 +8,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.register_blueprint(app_routes)
 
-CORS(app)  # מאפשר גישה ל-Frontend
+CORS(app)  # Allows access to Frontend
 
 
 pass

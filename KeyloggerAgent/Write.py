@@ -13,7 +13,7 @@ class FileWriter(IWriter):
         it again with the new data
         """
         try:
-            with open(name, "r") as file:
+            with open(name, "r",encoding="utf-8") as file:
                 try:
                     origin_data = json.load(file)
                 except json.JSONDecodeError:
@@ -29,7 +29,7 @@ class FileWriter(IWriter):
                     origin_data[window][timestamp] = list()
                 origin_data[window][timestamp] += data[window][timestamp]
 
-        with open(name, "w") as file:
+        with open(name, "w",encoding="utf-8") as file:
             json.dump(origin_data, file, indent='\t' , ensure_ascii=False )
     @staticmethod
     def load(file_name : str):

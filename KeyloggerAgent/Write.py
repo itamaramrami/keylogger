@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import json
+import requests
 
 class IWriter(ABC):
     @abstractmethod
@@ -20,20 +21,32 @@ class FileWriter(IWriter):
                     origin_data = dict()
         except FileNotFoundError:
             origin_data = dict()
-
-        for window in data:
-            if window not in origin_data:
-                origin_data[window] = dict()
-            for timestamp in data[window]:
-                if timestamp not in origin_data[window]:
-                    origin_data[window][timestamp] = list()
-                origin_data[window][timestamp] += data[window][timestamp]
+        for mac in data:
+            if mac not in origin_data:
+                origin_data[mac] = dict()
+            for window in data[mac]:
+                if window not in origin_data[mac]:
+                    origin_data[mac][window] = dict()
+                for timestamp in data[mac][window]:
+                    if timestamp not in origin_data[mac][window]:
+                        origin_data[mac][window][timestamp] = list()
+                    origin_data[mac][window][timestamp] += data[mac][window][timestamp]
 
         with open(name, "w",encoding="utf-8") as file:
             json.dump(origin_data, file, indent='\t' , ensure_ascii=False )
     @staticmethod
     def load(file_name : str):
-        with open(file_name) as file:
+        with open(file_name , encoding="utf-8") as file:
             temp = json.load(file)
         return temp
+
+
+class NetworkWriter(IWriter):
+    def write(self, data, name:str):
+        url = f"http://{name}/storage"
+        headers = {
+            "Content-Type": "application/json"
+        }
+        requests.post(url , json = data , headers = headers )
+
 

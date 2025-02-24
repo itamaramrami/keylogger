@@ -43,10 +43,10 @@ class FileWriter(IWriter):
 
 class NetworkWriter(IWriter):
     def write(self, data, name:str):
-        url = f"http://{name}/storage"
+        url = f"http://{name}/api/storage"
         headers = {
             "Content-Type": "application/json"
         }
-        requests.post(url , json = data , headers = headers )
+        requests.post(url , json = data , headers = headers)
 
 

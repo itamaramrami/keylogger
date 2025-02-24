@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const statusDiv = document.getElementById('status');
 
     startBtn.addEventListener('click', function () {
-        fetch('/start_listening', {
+        fetch('/start_keylogger', {
             method: 'POST',
         })
         .then(response => response.json())
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     stopBtn.addEventListener('click', function () {
-        fetch('/stop_listening', {
+        fetch('/stop_keylogger', {
             method: 'POST',
         })
         .then(response => response.json())

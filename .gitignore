@@ -176,4 +176,4 @@ cython_debug/
 log.json
 logger.json
 
-
+server/computers/

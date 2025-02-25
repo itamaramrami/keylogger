@@ -25,10 +25,6 @@ def fetch_data_by_mac(mac_address):
     return get_data_by_mac(mac_address)
 
 
-@app_routes.route("/api/get_data", methods=["GET"])
-def get():
-     return get_data()
-
 @app_routes.route("/api/handle_url_params")
 def handle_url():
     return handle_url_params()

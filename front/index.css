@@ -6,19 +6,21 @@ body {
     margin: 0;
     height: 100vh;
     background: white;
-    overflow: hidden; /* Empêche le débordement de la page */
+    overflow: scroll; /* Empêche le débordement de la page */
 }
 
 .container {
     display: flex;
     flex-grow: 1;
     height: 100%; /* Assure que le container prend toute la hauteur */
+    overflow: hidden; /* Pas de scroll */
+    max-height: 100vh;
 }
 
 /* Sidebar */
 .sidebar {
     width: 250px;
-    background-color: #f1f1f1;
+    background-color:   #f1f1f1;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     height: 100%; /* Empêche la sidebar de déborder */
@@ -32,23 +34,23 @@ body {
 .dropdown {
     width: 100%;
     height: 40px;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 5px;
     font-size: 14px;
 }
 
-/* Main Content */
-.content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px;
-    color: #333;
-    height: 100%; /* Assure que la section content occupe tout l'espace disponible */
-    overflow: hidden; /* Empêche le débordement */
-}
+    /* Main Content */
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+        color: #333;
+        height: 100%; /* Assure que la section content occupe tout l'espace disponible */
+        overflow: hidden; /* Empêche le débordement */
+    }
 
 /* Main message before selecting a computer */
 #main-message {
@@ -65,18 +67,20 @@ body {
     text-align: center;
     margin-bottom: 10px;
     color: #222;
-    display: none;
+    display: none ;
 }
 
 /* Blinking animation for recording icon */
 @keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0; }
+    0% { opacity: 0.8; }
+    60% { opacity: 0; }
+    80% {opacity: 0.8;}
     100% { opacity: 1; }
 }
 
 #recordingIcon {
     animation: blink 0.8s infinite;
+    font-size: 20px;
 }
 
 /* Log Content */
@@ -91,15 +95,22 @@ body {
 }
 
 /* Search & Buttons */
+#content_button {
+    display: flex;
+    justify-content: center; /* Centre les boutons horizontalement */
+    gap: 10px; /* Espacement entre les boutons */
+    margin-bottom: 10px; /* Ajoute un espace de 10px sous les boutons */
+}
+
 .search-box-container {
     display: flex;
+    flex-direction: column; /* Organise les éléments en colonne */
+    align-items: center;
     width: 80%;
     padding: 10px;
-    padding-bottom: 5%;
     border-top: 1px solid #ddd;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    box-sizing: border-box;
+    flex-shrink: 1;
 }
 
 .search-box {
@@ -110,9 +121,13 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     text-align: center;
+    flex-shrink: 1;
+
 }
 
-/* Buttons */
+
+
+
 .buttons {
     display: flex;
     gap: 10px;

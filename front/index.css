@@ -1,196 +1,182 @@
-/* General */
-body {
-    display: flex;
-    flex-direction: column;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    height: 100vh;
-    background: white;
-    overflow: hidden; /* Empêche le débordement de la page */
+/* Reset de base (pour éviter marges, paddings par défaut) */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* On évite le scroll horizontal global */
+body {
+  font-family: Arial, sans-serif;
+  background: white;
+  height: 100vh;       /* Pour prendre tout l'écran */
+  overflow-x: hidden;  /* Pas de scroll horizontal */
+  overflow-y: hidden;  /* On gère le scroll dans les conteneurs internes */
+}
+
+/* Container principal en flex */
 .container {
-    display: flex;
-    flex-grow: 1;
-    height: 100%;
-    overflow: hidden; /* Pas de scroll */
-    max-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh; /* Occupe toute la hauteur */
+  overflow: hidden; /* Pas de scroll global */
 }
 
 /* Sidebar */
 .sidebar {
-    width: 250px;
-    background-color: #f1f1f1;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 250px;
+  min-width: 250px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Pas de scroll horizontal */
 }
 
 .sidebar h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .dropdown {
-    width: 100%;
-    height: 40px;
-    border-radius: 8px;
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
 }
 
-/* Fenêtres dans la sidebar */
+/* Fenêtres listées dans la sidebar */
 .window-list {
-    list-style: none;
-    padding: 10px;
-    margin-top: 10px;
-    overflow-y: auto;
-    max-height: 60vh; /* Ajuste la hauteur pour qu'elle ne déborde pas */
-    scrollbar-width: thin;
-    scrollbar-color: #ddd transparent;
+  list-style: none;
+  margin-top: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 120px);
+  scrollbar-width: thin;
+  scrollbar-color: #ddd transparent;
 }
 
 .window-item {
-    cursor: pointer;
-    padding: 12px;
-    border-radius: 8px;
-    background-color: #f4f4f4;
-    margin-bottom: 5px;
-    transition: background-color 0.2s, color 0.2s, transform 0.1s;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: left;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  margin-bottom: 5px;
+  transition: background-color 0.2s, color 0.2s, transform 0.1s;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
 }
 
 .window-item:hover {
-    background-color: rgba(69, 89, 164, 0.15);
-    transform: scale(1.02);
+  background-color: rgba(69, 89, 164, 0.15);
+  transform: scale(1.02);
 }
 
 .window-item.active {
-    background-color: rgba(69, 89, 164, 0.5);
-    color: white;
-    font-weight: bold;
+  background-color: rgba(69, 89, 164, 0.5);
+  color: white;
+  font-weight: bold;
 }
 
-/* Main Content */
+/* Zone principale */
 .content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px;
-    color: #333;
-    height: 100%;
-    overflow: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* Centre horizontalement les éléments */
+  justify-content: flex-start;
+  padding: 20px;
+  color: #333;
+  overflow: hidden;       /* Gère le scroll en interne */
 }
 
-/* Main message before selecting a computer */
+/* Message principal */
 #main-message {
-    font-size: 34px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 100px;
-    margin-bottom: 0;
+  font-size: 34px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 0;
 }
 
-/* Recording status */
+/* Indicateur d'enregistrement */
 #recordingStatus {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 10px;
-    color: #222;
-    display: none;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #222;
+  display: none;
 }
 
-/* Blinking animation for recording icon */
 @keyframes blink {
-    0% { opacity: 0.8; }
-    60% { opacity: 0; }
-    80% { opacity: 0.8; }
-    100% { opacity: 1; }
+  0%   { opacity: 0.8; }
+  60%  { opacity: 0;   }
+  80%  { opacity: 0.8; }
+  100% { opacity: 1;   }
 }
 
 #recordingIcon {
-    animation: blink 0.8s infinite;
-    font-size: 20px;
+  animation: blink 0.8s infinite;
+  font-size: 20px;
 }
 
-/* Log Content */
+/* Contenu des logs */
 .log-content {
-    width: 80%;
-    height: 70vh;
-    overflow-y: auto;
-    background: transparent;
-    padding: 10px;
-    color: #222;
-    scrollbar-color: #ddd #ececec;
-    border-radius: 8px;
+  /* Taille max ~700px et centré grâce au margin */
+  max-width: 700px;
+  width: 80%;         /* 80% de la zone content */
+  margin: 20px auto;  /* marges haut-bas de 20px, et centrage horizontal */
+
+  background: transparent;
+  color: #222;
+  border-radius: 8px;
+
+  /* On autorise le scroll vertical */
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Empêche la coupure arbitraire de lettres :
+     retour à la ligne sur les espaces ou si mot trop long */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  scrollbar-color: #ddd #ececec;
 }
 
-/* Search & Buttons */
-#content_button {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
+/* Conteneur du champ de recherche */
 .search-box-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
 }
 
+/* Zone de saisie (textarea)
+   614px de large, 128px de haut */
 .search-box {
-    width: 250px;
-    height: 30px;
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    text-align: center;
+  width: 614px;
+  height: 128px;
+  padding: 8px 12px;
+  font-size: 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  resize: none; /* pas de redimensionnement libre */
+  overflow-y: auto;
 }
 
-/* Buttons */
-.buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.action-btn {
-    padding: 10px 15px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.start-btn {
-    background-color: red;
-}
-
-.stop-btn {
-    background-color: black;
-}
-
-.action-btn:hover {
-    opacity: 0.8;
-}
-
-/* Hidden elements */
+/* Éléments cachés */
 .hidden {
-    display: none;
+  display: none;
 }

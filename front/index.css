@@ -6,13 +6,13 @@ body {
     margin: 0;
     height: 100vh;
     background: white;
-    overflow: scroll; /* Empêche le débordement de la page */
+    overflow: hidden; /* Empêche le débordement de la page */
 }
 
 .container {
     display: flex;
     flex-grow: 1;
-    height: 100%; /* Assure que le container prend toute la hauteur */
+    height: 100%;
     overflow: hidden; /* Pas de scroll */
     max-height: 100vh;
 }
@@ -20,10 +20,12 @@ body {
 /* Sidebar */
 .sidebar {
     width: 250px;
-    background-color:   #f1f1f1;
+    background-color: #f1f1f1;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 100%; /* Empêche la sidebar de déborder */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar h2 {
@@ -37,20 +39,55 @@ body {
     border-radius: 8px;
     padding: 5px;
     font-size: 14px;
+    border: 1px solid #ccc;
 }
 
-    /* Main Content */
-    .content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 20px;
-        color: #333;
-        height: 100%; /* Assure que la section content occupe tout l'espace disponible */
-        overflow: hidden; /* Empêche le débordement */
-    }
+/* Fenêtres dans la sidebar */
+.window-list {
+    list-style: none;
+    padding: 10px;
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 60vh; /* Ajuste la hauteur pour qu'elle ne déborde pas */
+    scrollbar-width: thin;
+    scrollbar-color: #ddd transparent;
+}
+
+.window-item {
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    margin-bottom: 5px;
+    transition: background-color 0.2s, color 0.2s, transform 0.1s;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.window-item:hover {
+    background-color: rgba(69, 89, 164, 0.15);
+    transform: scale(1.02);
+}
+
+.window-item.active {
+    background-color: rgba(69, 89, 164, 0.5);
+    color: white;
+    font-weight: bold;
+}
+
+/* Main Content */
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    color: #333;
+    height: 100%;
+    overflow: hidden;
+}
 
 /* Main message before selecting a computer */
 #main-message {
@@ -67,14 +104,14 @@ body {
     text-align: center;
     margin-bottom: 10px;
     color: #222;
-    display: none ;
+    display: none;
 }
 
 /* Blinking animation for recording icon */
 @keyframes blink {
     0% { opacity: 0.8; }
     60% { opacity: 0; }
-    80% {opacity: 0.8;}
+    80% { opacity: 0.8; }
     100% { opacity: 1; }
 }
 
@@ -86,31 +123,31 @@ body {
 /* Log Content */
 .log-content {
     width: 80%;
-    height: 70vh; /* Garde un espace spécifique pour les logs */
+    height: 70vh;
     overflow-y: auto;
     background: transparent;
     padding: 10px;
     color: #222;
     scrollbar-color: #ddd #ececec;
+    border-radius: 8px;
 }
 
 /* Search & Buttons */
 #content_button {
     display: flex;
-    justify-content: center; /* Centre les boutons horizontalement */
-    gap: 10px; /* Espacement entre les boutons */
-    margin-bottom: 10px; /* Ajoute un espace de 10px sous les boutons */
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .search-box-container {
     display: flex;
-    flex-direction: column; /* Organise les éléments en colonne */
+    flex-direction: column;
     align-items: center;
     width: 80%;
     padding: 10px;
     border-top: 1px solid #ddd;
     box-sizing: border-box;
-    flex-shrink: 1;
 }
 
 .search-box {
@@ -121,13 +158,9 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     text-align: center;
-    flex-shrink: 1;
-
 }
 
-
-
-
+/* Buttons */
 .buttons {
     display: flex;
     gap: 10px;
@@ -153,10 +186,11 @@ body {
     background-color: black;
 }
 
-.hidden {
-    display: none;
-}
-
 .action-btn:hover {
     opacity: 0.8;
+}
+
+/* Hidden elements */
+.hidden {
+    display: none;
 }

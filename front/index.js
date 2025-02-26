@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function displayContent(content) {
+        // Vérifier si l'utilisateur est déjà en bas avant d'ajouter les nouvelles données
+        const isScrolledToBottom = logContent.scrollHeight - logContent.clientHeight <= logContent.scrollTop + 10;
+
         logContent.innerHTML = "";
 
         let lastWindow = null;
@@ -65,10 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 windowTitle.textContent = window_mame;
                 windowTitle.style.fontWeight = "bold";
                 windowTitle.style.marginTop = "10px";
-                windowTitle.style.marginBottom = "5px"; // Espace de 5px max avant le timestamp
+                windowTitle.style.marginBottom = "5px";
                 logContent.appendChild(windowTitle);
 
-                // On affiche le timestamp immédiatement
                 lastWindow = window_mame;
                 lastTimestamp = dateObj;
                 appendTimestamp(fullTimestamp);
@@ -87,8 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             logContent.appendChild(dataElement);
         });
 
-        // Auto-scroll sauf si l'utilisateur a scrollé vers le haut
-        const isScrolledToBottom = logContent.scrollHeight - logContent.clientHeight <= logContent.scrollTop + 10;
+        // Si l'utilisateur était en bas, on le redirige en bas après mise à jour
         if (isScrolledToBottom) {
             logContent.scrollTop = logContent.scrollHeight;
         }
@@ -97,9 +98,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function appendTimestamp(timestampText) {
         const timeElement = document.createElement("p");
         timeElement.innerHTML = `<strong>${timestampText}</strong>`;
-        timeElement.style.fontSize = "11px"; // Taille réduite à 11px
+        timeElement.style.fontSize = "11px";
         timeElement.style.fontWeight = "bold";
-        timeElement.style.marginBottom = "5px"; // Espace entre timestamp et logs
+        timeElement.style.marginBottom = "5px";
         logContent.appendChild(timeElement);
     }
 
